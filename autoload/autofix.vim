@@ -1,15 +1,9 @@
 function! autofix#autofix() abort
-	if !exists("s:fixers")
-		let s:fixers = autofix#load_fixers()
-	endif
-	call autofix#apply_fixers(getqflist(), s:fixers)
+	call autofix#apply_fixers(getqflist(), autofix#load_fixers_with_caching())
 endfunction
 
 function! autofix#autofix_current_loc() abort
-	if !exists("s:fixers")
-		let s:fixers = autofix#load_fixers()
-	endif
-	call autofix#apply_fixers(getloclist(winnr()), s:fixers)
+	call autofix#apply_fixers(getloclist(winnr()), autofix#load_fixers_with_caching())
 endfunction
 
 function! autofix#apply_fixers(qflist, fixers) abort
@@ -24,7 +18,19 @@ function! autofix#apply_fixers(qflist, fixers) abort
 	endfor
 endfunction
 
-function! autofix#load_fixers() abort
+function! autofix#load_fixers_with_caching() abort
+	if exists("s:fixers")
+		return s:fixers
+	endif
+	let s:fixers = s:load_fixers()
+	return s:fixers
+endfunction
+
+function! autofix#reload_fixers() abort
+	let s:fixers = s:load_fixers()
+endfunction
+
+function! s:load_fixers() abort
 	let fixers = []
 	let fixer_files = split(globpath(&runtimepath, 'autoload/autofix/fixers/**/*.vim'), '\n')
 	" TODO: Make it possible to ignore fixers with g:autofix#fixers#ignored

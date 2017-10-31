@@ -7,6 +7,7 @@ set cpo&vim
 
 command! -nargs=0 -bar AutoFix call autofix#autofix()
 command! -nargs=0 -bar AutoFixLoc call autofix#autofix_current_loc()
+command! -nargs=0 -bar AutoFixReloadFixers call autofix#reload_fixers()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -38,9 +38,16 @@ COMMANDS					*autofix-commands*
                 It loads Fixers on first invocation and caches them on memory.
 
 :AutoFixLoc					*:AutoFixLoc*
-                AutoFix command apply Fixers against a location list
+                AutoFixLoc command apply Fixers against a location list
                 associated with current window.
                 It loads Fixers on first invocation and caches them on memory.
+
+:AutoFixReloadFixers				*:AutoFixReloadFixers*
+                AutoFixReloadFixers command reloads Fixers from 'runtimepath'.
+                This is useful when you defined new Fixers and want to load
+                them.
+                See |autofix-defining-fixers| for how Fixers are loaded from
+                'runtimepath'.
 
 ==============================================================================
 CUSTOMIZING					*autofix-customizing*
