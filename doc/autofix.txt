@@ -26,24 +26,24 @@ USAGE						*autofix-usage*
 
 There are 2 commands defined when sourcing plugin/autofix.vim:
 
-Use `:AutoFix` to fix errors loaded in quickfix list.
-Use `:AutoFixLoc` to fix errors loaded in the location list tied to current
+Use `:Autofix` to fix errors loaded in quickfix list.
+Use `:AutofixLoc` to fix errors loaded in the location list tied to current
 window.
 
 ------------------------------------------------------------------------------
 COMMANDS					*autofix-commands*
 
-:AutoFix					*:AutoFix*
-                AutoFix command apply Fixers against the QuickFix list.
+:Autofix					*:Autofix*
+                Autofix command apply Fixers against the QuickFix list.
                 It loads Fixers on first invocation and caches them on memory.
 
-:AutoFixLoc					*:AutoFixLoc*
-                AutoFixLoc command apply Fixers against a location list
+:AutofixLoc					*:AutofixLoc*
+                AutofixLoc command apply Fixers against a location list
                 associated with current window.
                 It loads Fixers on first invocation and caches them on memory.
 
-:AutoFixReloadFixers				*:AutoFixReloadFixers*
-                AutoFixReloadFixers command reloads Fixers from 'runtimepath'.
+:AutofixReloadFixers				*:AutofixReloadFixers*
+                AutofixReloadFixers command reloads Fixers from 'runtimepath'.
                 This is useful when you defined new Fixers and want to load
                 them.
                 See |autofix-defining-fixers| for how Fixers are loaded from
