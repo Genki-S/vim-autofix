@@ -19,30 +19,30 @@ function! s:suite.test_new_bare()
 	call s:assert.is_function(s:fixer._generate_matcher_key)
 endfunction
 
-function! s:suite.test_with_exec()
-	let newfixer = autofix#fixer#with_exec(s:fixer, '') " exec nothing
+function! s:suite.test_with_apply_exec()
+	let newfixer = autofix#fixer#with_apply_exec(s:fixer, '') " exec nothing
 	call s:assert.is_function(newfixer.apply)
 	call s:assert.equal(newfixer.apply({}), 1)
 
-	let newfixer = autofix#fixer#with_exec(s:fixer, 'nonexistentcommand')
+	let newfixer = autofix#fixer#with_apply_exec(s:fixer, 'nonexistentcommand')
 	call s:assert.is_function(newfixer.apply)
 	Throws /Not an editor command: nonexistentcommand/ newfixer.apply({})
 endfunction
 
-function! s:suite.test_with_text_matcher()
+function! s:suite.test_with_matcher_text()
 	call s:assert.equal(len(s:fixer.matchers), 0)
 	let pattern = "^missing ',' before newline"
-	let newfixer = autofix#fixer#with_text_matcher(s:fixer, pattern)
+	let newfixer = autofix#fixer#with_matcher_text(s:fixer, pattern)
 	call s:assert.equal(len(newfixer.matchers), 1)
 	call s:assert.is_function(newfixer.matchers.text_matcher_0)
 	call s:assert.equal(0, newfixer.matchers.text_matcher_0({'text': 'unknown error'}))
 	call s:assert.equal(1, newfixer.matchers.text_matcher_0({'text': "missing ',' before newline in argument list"}))
 endfunction
 
-function! s:suite.test_with_extension_matcher()
+function! s:suite.test_with_matcher_extension()
 	call s:assert.equal(len(s:fixer.matchers), 0)
 	let ext = "go"
-	let newfixer = autofix#fixer#with_extension_matcher(s:fixer, ext)
+	let newfixer = autofix#fixer#with_matcher_extension(s:fixer, ext)
 	call s:assert.equal(len(newfixer.matchers), 1)
 	call s:assert.is_function(newfixer.matchers.extension_matcher_0)
 	open test.vim

@@ -9,7 +9,7 @@ function! autofix#fixer#new_bare(name) abort
 	return fixer
 endfunction
 
-function! autofix#fixer#with_exec(fixer, exec) abort
+function! autofix#fixer#with_apply_exec(fixer, exec) abort
 	let newfixer = deepcopy(a:fixer)
 	let exec = a:exec
 	function! newfixer.apply(qfitem) abort dict closure
@@ -19,7 +19,7 @@ function! autofix#fixer#with_exec(fixer, exec) abort
 	return newfixer
 endfunction
 
-function! autofix#fixer#with_text_matcher(fixer, pattern) abort
+function! autofix#fixer#with_matcher_text(fixer, pattern) abort
 	let newfixer = deepcopy(a:fixer)
 	let pattern = a:pattern
 	let key = newfixer._generate_matcher_key('text_matcher')
@@ -31,7 +31,7 @@ function! autofix#fixer#with_text_matcher(fixer, pattern) abort
 	return newfixer
 endfunction
 
-function! autofix#fixer#with_extension_matcher(fixer, ext) abort
+function! autofix#fixer#with_matcher_extension(fixer, ext) abort
 	let newfixer = deepcopy(a:fixer)
 	let ext = a:ext
 	let key = newfixer._generate_matcher_key('extension_matcher')
