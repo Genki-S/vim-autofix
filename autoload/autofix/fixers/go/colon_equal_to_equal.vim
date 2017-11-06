@@ -6,7 +6,7 @@ endfunction
 
 let s:fixer = autofix#fixer#with_matcher_extension(s:fixer, 'go')
 " This is most likely because the LHS is already defined
-let s:fixer = autofix#fixer#with_matcher_text(s:fixer, "expected identifier on left side of :=")
+let s:fixer = autofix#fixer#with_matcher_text(s:fixer, 'expected identifier on left side of :=')
 " So we are substituting short variable declaration operator to assignment operator
 let s:fixer = autofix#fixer#with_apply_exec(s:fixer, 's/:=/=/')
 

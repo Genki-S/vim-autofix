@@ -2,13 +2,13 @@ let s:suite = themis#suite('autoload/autofix/fixer.vim')
 let s:assert = themis#helper('assert')
 call themis#helper('command').with(s:assert)
 
-function! s:suite.before_each()
+function! s:suite.before_each() abort
 endfunction
 
-function! s:suite.after_each()
+function! s:suite.after_each() abort
 endfunction
 
-function! s:suite.test_apply_fixers()
+function! s:suite.test_apply_fixers() abort
 	let fizz_fixer = autofix#fixer#new_bare('test-fixer')
 	let fizz_fixer_visited_count = 0
 	let fizz_fixer_applied_count = 0
@@ -53,7 +53,7 @@ function! s:suite.test_apply_fixers()
 	call s:assert.equals(buzz_fixer_applied_count, 30 / 5)
 endfunction
 
-function! s:suite.test_load_fixers_with_caching_and_reload_fixers()
+function! s:suite.test_load_fixers_with_caching_and_reload_fixers() abort
 	let save_rtp = &runtimepath
 	let &runtimepath = join(filter(
 				\ split(&runtimepath, ','),
@@ -61,12 +61,12 @@ function! s:suite.test_load_fixers_with_caching_and_reload_fixers()
 				\ ), ',')
 	let loaded = autofix#load_fixers_with_caching()
 	let target = filter(loaded, 'v:val.name ==# "go#missing_comma"')
-	call s:assert.equals(len(target), 1, "target fixer should be loaded")
+	call s:assert.equals(len(target), 1, 'target fixer should be loaded')
 
-	let &runtimepath = ""
+	let &runtimepath = ''
 	let loaded = autofix#load_fixers_with_caching()
 	" Should load from cached content
-	call s:assert.equals(len(target), 1, "target fixer should be loaded")
+	call s:assert.equals(len(target), 1, 'target fixer should be loaded')
 
 	call autofix#reload_fixers()
 	let loaded = autofix#load_fixers_with_caching()

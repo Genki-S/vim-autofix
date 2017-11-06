@@ -19,7 +19,7 @@ function! autofix#apply_fixers(qflist, fixers) abort
 endfunction
 
 function! autofix#load_fixers_with_caching() abort
-	if exists("s:fixers")
+	if exists('s:fixers')
 		return s:fixers
 	endif
 	let s:fixers = s:load_fixers()

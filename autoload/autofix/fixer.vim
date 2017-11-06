@@ -45,7 +45,7 @@ endfunction
 
 function! s:visit_qfitem(qfitem) abort dict
 	if !a:qfitem.valid
-		throw "Invalid quickfix item is passed to visit_qfitem"
+		throw 'Invalid quickfix item is passed to visit_qfitem'
 	endif
 	if a:qfitem.vcol
 		" TODO: Figure out what this means and handle appropriately
