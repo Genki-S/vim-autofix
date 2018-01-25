@@ -1,43 +1,54 @@
 " TODO: Consider the appropriate undochain and jumplist while executing/canceling fixers
 
 function! autofix#autofix(bang) abort
+	let interface = autofix#interface#new()
 	if a:bang
-		call autofix#apply_fixers(getqflist(), autofix#load_fixers_with_caching())
+		call autofix#apply_fixers(getqflist(), autofix#load_fixers_with_caching(), interface)
 	else
-		call autofix#apply_fixers_interactive(getqflist(), autofix#load_fixers_with_caching())
+		call autofix#apply_fixers_interactive(getqflist(), autofix#load_fixers_with_caching(), interface)
 	endif
 endfunction
 
 function! autofix#autofix_current_loc(bang) abort
+	let interface = autofix#interface#new()
 	if a:bang
-		call autofix#apply_fixers(getloclist(winnr()), autofix#load_fixers_with_caching())
+		call autofix#apply_fixers(getloclist(winnr()), autofix#load_fixers_with_caching(), interface)
 	else
-		call autofix#apply_fixers_interactive(getloclist(winnr()), autofix#load_fixers_with_caching())
+		call autofix#apply_fixers_interactive(getloclist(winnr()), autofix#load_fixers_with_caching(), interface)
 	endif
 endfunction
 
-function! autofix#apply_fixers(qflist, fixers) abort
+function! autofix#apply_fixers(qflist, fixers, interface) abort
+	let found = 0
 	for qfitem in a:qflist
 		for fixer in a:fixers
 			if fixer.check_match(qfitem)
+				let found = 1
 				call fixer.visit_qfitem(qfitem)
 				call fixer.apply(qfitem)
 			endif
 		endfor
 	endfor
+
+	if !found
+		call a:interface.echomsg("vim-autofix: nothing to do")
+	endif
 endfunction
 
-function! autofix#apply_fixers_interactive(qflist, fixers) abort
+function! autofix#apply_fixers_interactive(qflist, fixers, interface) abort
 	" show cursorline/column to indicate where a fixer is being applied
 	let save_cursorline=&cursorline
 	let save_cursorcolumn=&cursorcolumn
 	set cursorline
 	set cursorcolumn
 
+	let found = 0
 	let l:quit = 0
 	for qfitem in a:qflist
 		for fixer in a:fixers
 			if fixer.check_match(qfitem)
+				let found = 1
+
 				call fixer.visit_qfitem(qfitem)
 				redraw
 
@@ -56,6 +67,10 @@ function! autofix#apply_fixers_interactive(qflist, fixers) abort
 			break
 		endif
 	endfor
+
+	if !found
+		call a:interface.echomsg("vim-autofix: nothing to do")
+	endif
 
 	let &cursorline = save_cursorline
 	let &cursorcolumn = save_cursorcolumn
