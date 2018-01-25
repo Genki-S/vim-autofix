@@ -3,6 +3,7 @@ function! autofix#fixer#new_bare(name) abort
 	let fixer.name = a:name
 	let fixer.visit_qfitem = function('s:visit_qfitem')
 	let fixer.check_match = function('s:check_match')
+	let fixer.prompt_apply_fixer = function('s:prompt_apply_fixer')
 	let fixer.matchers = {}
 
 	let fixer._generate_matcher_key = function('s:generate_matcher_key')
@@ -63,6 +64,16 @@ function! s:check_match(qfitem) abort dict
 		endif
 	endfor
 	return 1
+endfunction
+
+function! s:prompt_apply_fixer() abort dict
+	let msg = 'Apply fixer "' . self.name . '"?'
+	let choice = 0
+	while choice == 0
+		let choice = confirm(msg, "&Yes\n&No\n&Quit", 0)
+	endwhile
+	let to_name = {1: "Yes", 2: "No", 3: "Quit"}
+	return to_name[choice]
 endfunction
 
 function! s:generate_matcher_key(prefix) abort dict

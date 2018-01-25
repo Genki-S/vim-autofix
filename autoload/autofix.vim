@@ -1,21 +1,64 @@
-function! autofix#autofix() abort
-	call autofix#apply_fixers(getqflist(), autofix#load_fixers_with_caching())
+" TODO: Consider the appropriate undochain and jumplist while executing/canceling fixers
+
+function! autofix#autofix(bang) abort
+	if a:bang
+		call autofix#apply_fixers(getqflist(), autofix#load_fixers_with_caching())
+	else
+		call autofix#apply_fixers_interactive(getqflist(), autofix#load_fixers_with_caching())
+	endif
 endfunction
 
-function! autofix#autofix_current_loc() abort
-	call autofix#apply_fixers(getloclist(winnr()), autofix#load_fixers_with_caching())
+function! autofix#autofix_current_loc(bang) abort
+	if a:bang
+		call autofix#apply_fixers(getloclist(winnr()), autofix#load_fixers_with_caching())
+	else
+		call autofix#apply_fixers_interactive(getloclist(winnr()), autofix#load_fixers_with_caching())
+	endif
 endfunction
 
 function! autofix#apply_fixers(qflist, fixers) abort
 	for qfitem in a:qflist
 		for fixer in a:fixers
 			if fixer.check_match(qfitem)
-				" TODO: Prompt users before applying fixers (control with bang)
 				call fixer.visit_qfitem(qfitem)
 				call fixer.apply(qfitem)
 			endif
 		endfor
 	endfor
+endfunction
+
+function! autofix#apply_fixers_interactive(qflist, fixers) abort
+	" show cursorline/column to indicate where a fixer is being applied
+	let save_cursorline=&cursorline
+	let save_cursorcolumn=&cursorcolumn
+	set cursorline
+	set cursorcolumn
+
+	let l:quit = 0
+	for qfitem in a:qflist
+		for fixer in a:fixers
+			if fixer.check_match(qfitem)
+				call fixer.visit_qfitem(qfitem)
+				redraw
+
+				let choice = fixer.prompt_apply_fixer()
+				if choice == "Yes"
+					call fixer.apply(qfitem)
+					redraw
+				elseif choice == "Quit"
+					let l:quit = 1
+					break
+				endif
+			endif
+		endfor
+
+		if l:quit
+			break
+		endif
+	endfor
+
+	let &cursorline = save_cursorline
+	let &cursorcolumn = save_cursorcolumn
 endfunction
 
 function! autofix#load_fixers_with_caching() abort
