@@ -55,8 +55,14 @@ CUSTOMIZING					*autofix-customizing*
 ------------------------------------------------------------------------------
 DEFINING FIXERS					*autofix-defining-fixers*
 
+Users can add their own fixers without touching this plugin. This section
+describes step-by-step instruction for defining custom fixers.
 For example Fixer definitions, please see files in autoload/autofix/fixers
 under vim-autofix installation directory.
+
+I stole this customization architecture from
+https://github.com/Shougo/unite.vim . Huge thanks to Shougo-san for his
+awesome plugins and making great Vim script examples accessible to the world.
 
 1. Placing Fixer files
 
