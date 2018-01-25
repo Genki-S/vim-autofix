@@ -142,13 +142,13 @@ newline" and fix it:
   endfunction'
 
   " when you define multiple matcher functions under s:fixer.matchers, all the
-  " matcher functions should return truethy for the fixer to take effect
+  " matcher functions should return truthy for the fixer to take effect
 
   function! s:fixer.apply(qfitem) abort dict closure
     " vim-autofix brings cursor to quickfix item location before calling apply
     " so just exec'ing is fine
     exec "normal! A,"
-    " return truethy to signal the apply was successful
+    " return truthy to signal the apply was successful
     return 1
   endfunction
 <
