@@ -24,23 +24,32 @@ their own Fixers. For how to define your own fixer, please refer to
 ==============================================================================
 USAGE						*autofix-usage*
 
-There are 2 commands defined when sourcing plugin/autofix.vim:
+vim-autofix defines some commands described in the next section. Use them
+as-is, or define mappings yourself to make it easier to invoke. For example:
 
-Use `:Autofix` to fix errors loaded in quickfix list.
-Use `:AutofixLoc` to fix errors loaded in the location list tied to current
-window.
+>
+  " "fq" for fix quickfix items
+  nnoremap <silent> <Leader>fq :<C-u>Autofix<CR>
+  " "fl" for fix locationlist items
+  nnoremap <silent> <Leader>fl :<C-u>AutofixLoc<CR>
+<
 
 ------------------------------------------------------------------------------
 COMMANDS					*autofix-commands*
 
 :Autofix					*:Autofix*
-                Autofix command apply Fixers against the QuickFix list.
-                It loads Fixers on first invocation and caches them on memory.
+                Apply Fixers against the QuickFix list. It prompts users for
+                each fixers (like 'c' flag for `:substitute` command does).
+
+:Autofix!					*:Autofix!*
+                Like |:Autofix|, but apply all fixers without asking.
 
 :AutofixLoc					*:AutofixLoc*
-                AutofixLoc command apply Fixers against a location list
-                associated with current window.
-                It loads Fixers on first invocation and caches them on memory.
+                Apply Fixers against a location list associated with current
+                window.
+
+:AutofixLoc!					*:AutofixLoc!*
+                Like |:AutofixLoc|, but apply all fixers without asking.
 
 :AutofixReloadFixers				*:AutofixReloadFixers*
                 AutofixReloadFixers command reloads Fixers from 'runtimepath'.
