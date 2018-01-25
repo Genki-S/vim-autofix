@@ -6,6 +6,7 @@ CONTENTS					*autofix-contents*
 INTRODUCTION			|autofix-introduction|
 USAGE				|autofix-usage|
   COMMANDS			  |autofix-commands|
+  VARIABLES			  |autofix-variables|
 CUSTOMIZING			|autofix-customizing|
   DEFINING FIXERS		  |autofix-defining-fixers|
 CHANGELOG			|autofix-changelog|
@@ -57,6 +58,13 @@ COMMANDS					*autofix-commands*
                 them.
                 See |autofix-defining-fixers| for how Fixers are loaded from
                 'runtimepath'.
+
+------------------------------------------------------------------------------
+VARIABLES					*autofix-variables*
+
+g:autofix#ignore_default_fixers		*g:autofix#ignore_default_fixers*
+                If this variable is set to truthy, vim-autofix will not load
+                fixers which comes with vim-autofix.
 
 ==============================================================================
 CUSTOMIZING					*autofix-customizing*

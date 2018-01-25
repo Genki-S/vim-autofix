@@ -88,13 +88,22 @@ function! autofix#reload_fixers() abort
 	let s:fixers = s:load_fixers()
 endfunction
 
+" for testing
+function! autofix#_clear_loaded_fixers() abort
+	if exists('s:fixers')
+		unlet s:fixers
+	endif
+endfunction
+
 function! s:load_fixers() abort
 	let fixers = []
 	let fixer_files = split(globpath(&runtimepath, 'autoload/autofix/fixers/**/*.vim'), '\n')
-	" TODO: Make it possible to ignore fixers with g:autofix#fixers#ignored
 	for file in fixer_files
 		let path = substitute(matchstr(file, 'autofix/fixers/\zs.*\ze.vim'), '/', '#', 'g')
 		let fixer = autofix#fixers#{path}#define()
+		if get(g:, 'autofix#ignore_default_fixers', 0) && fixer._private.default
+			continue
+		endif
 		call extend(fixers, [fixer])
 	endfor
 	return fixers

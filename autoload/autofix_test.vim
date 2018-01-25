@@ -3,6 +3,14 @@ let s:assert = themis#helper('assert')
 call themis#helper('command').with(s:assert)
 
 function! s:suite.before_each() abort
+	call s:setup_interface()
+	call s:setup_fixers()
+	call s:setup_qflist()
+	call s:setup_runtimepath()
+	call autofix#_clear_loaded_fixers()
+endfunction
+
+function! s:setup_interface() abort
 	let s:interface = autofix#interface#new()
 	let s:interface_echomsg_msg = ""
 	let s:interface_echoerr_msg = ""
@@ -12,7 +20,9 @@ function! s:suite.before_each() abort
 	function! s:interface.echoerr(msg) abort
 		let s:interface_echoerr_msg = a:msg
 	endfunction
+endfunction
 
+function! s:setup_fixers() abort
 	let s:fizz_fixer = autofix#fixer#new_bare('test-fixer')
 	let s:fizz_fixer_visited_count = 0
 	let s:fizz_fixer_applied_count = 0
@@ -41,7 +51,9 @@ function! s:suite.before_each() abort
 		let s:buzz_fixer_applied_count += 1
 		return 1
 	endfunction
+endfunction
 
+function! s:setup_qflist() abort
 	let s:qflist_length = 30
 	let s:qflist = []
 	let i = 1
@@ -52,7 +64,20 @@ function! s:suite.before_each() abort
 	endwhile
 endfunction
 
+function! s:setup_runtimepath() abort
+	let s:save_rtp = &runtimepath
+	let &runtimepath = join(filter(
+				\ split(&runtimepath, ','),
+				\ 'v:val =~# "vim-autofix"'
+				\ ), ',')
+endfunction
+
 function! s:suite.after_each() abort
+	call s:restore_runtimepath()
+endfunction
+
+function! s:restore_runtimepath() abort
+	let &runtimepath = s:save_rtp
 endfunction
 
 function! s:suite.test_apply_fixers() abort
@@ -122,11 +147,6 @@ function! s:suite.test_apply_fixers_interfactive_nomatch() abort
 endfunction
 
 function! s:suite.test_load_fixers_with_caching_and_reload_fixers() abort
-	let save_rtp = &runtimepath
-	let &runtimepath = join(filter(
-				\ split(&runtimepath, ','),
-				\ 'v:val =~# "vim-autofix"'
-				\ ), ',')
 	let loaded = autofix#load_fixers_with_caching()
 	let target = filter(loaded, 'v:val.name ==# "go#missing_comma"')
 	call s:assert.equals(len(target), 1, 'target fixer should be loaded')
@@ -139,6 +159,10 @@ function! s:suite.test_load_fixers_with_caching_and_reload_fixers() abort
 	call autofix#reload_fixers()
 	let loaded = autofix#load_fixers_with_caching()
 	call s:assert.equals(len(loaded), 0)
+endfunction
 
-	let &runtimepath = save_rtp
+function! s:suite.test_load_fixers_ignore_default_option() abort
+	let g:autofix#ignore_default_fixers = 1
+	let loaded = autofix#load_fixers_with_caching()
+	call s:assert.equals(len(loaded), 0, 'nothing should be loaded when ignore_default_fixers is set')
 endfunction
