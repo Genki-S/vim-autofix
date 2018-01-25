@@ -133,6 +133,9 @@ newline" and fix it:
     return match(a:qfitem.text, pattern) != -1',
   endfunction'
 
+  " when you define multiple matcher functions under s:fixer.matchers, all the
+  " matcher functions should return truethy for the fixer to take effect
+
   function! s:fixer.apply(qfitem) abort dict closure
     " vim-autofix brings cursor to quickfix item location before calling apply
     " so just exec'ing is fine
