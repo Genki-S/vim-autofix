@@ -2,7 +2,7 @@
 
 Automatically fix quickfix items with predefined/customizable "Fixers".
 
-TODO: Demo gif
+![demo.gif](https://user-images.githubusercontent.com/1609598/35377941-66f656e4-01f4-11e8-924d-1998aac6447a.gif)
 
 ## Introduction
 
