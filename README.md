@@ -104,8 +104,8 @@ For example, define the following functions to match the golang error
   " whatever works for the function name ("match_missing_comma" in this case)
   " as long as they are unique
   function! s:fixer.matchers.match_missing_comma(qfitem) abort dict closure
-    return match(a:qfitem.text, pattern) != -1',
-  endfunction'
+    return match(a:qfitem.text, pattern) != -1
+  endfunction
 
   " when you define multiple matcher functions under s:fixer.matchers, all the
   " matcher functions should return truthy for the fixer to take effect
